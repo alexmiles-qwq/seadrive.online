@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Ретро Сайт</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ctext y='14' font-size='14'%3E%F0%9F%8C%90%3C/text%3E%3C/svg%3E">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#c0dff0;
+      --panel:#f8f3d4;
+      --accent:#0066cc;
+      --shadow:#999;
+    }
+    html,body{height:100%;}
+    body{
+      margin:0;
+      font-family: Arial, sans-serif;
+      background: repeating-linear-gradient(45deg, #e6f2fb 0 8px, #cfe9f7 8px 16px);
+      color:#111;
+      -webkit-font-smoothing:antialiased;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .page{
+      width:920px;
+      border:6px ridge #fff;
+      background: linear-gradient(180deg,var(--panel),#efe7c6);
+      box-shadow: 8px 8px 0 var(--shadow);
+      padding:22px;
+    }
+    header{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      margin-bottom:16px;
+    }
+    .logo{
+      width:84px;height:84px;
+      background:linear-gradient(180deg,#fff,#f1f1f1);
+      border:4px outset #ddd;
+      display:flex;align-items:center;justify-content:center;
+      font-family:'Press Start 2P',monospace; font-size:22px;
+      color:var(--accent);
+    }
+    h1{font-size:20px;margin:0;font-family:'Press Start 2P',monospace;color:#333}
+    .meta{font-size:12px;color:#444}
+
+    main{
+      display:flex;
+      gap:18px;
+      align-items:flex-start;
+    }
+    nav{
+      width:260px;
+      background:#fff5d1;
+      border:3px solid #e1d09a;
+      padding:14px;
+      box-shadow: inset 0 2px 0 rgba(255,255,255,0.6);
+    }
+    .btn{
+      display:block;
+      width:100%;
+      text-align:center;
+      padding:12px 8px;
+      margin:10px 0;
+      text-decoration:none;
+      font-weight:bold;
+      border:3px outset #ddd;
+      background:linear-gradient(180deg,#f6f6f6,#e9e9e9);
+      color:#000;
+      box-shadow: 2px 2px 0 #b9b9b9;
+      border-radius:6px;
+      font-family:inherit;
+      letter-spacing:1px;
+    }
+    .btn:active{transform:translateY(2px);box-shadow:none}
+
+    .content{
+      flex:1;
+      padding:12px 18px;
+      background:linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.3));
+      border:3px solid #e6dac0;
+      min-height:260px;
+    }
+
+    footer{
+      margin-top:14px;font-size:12px;color:#444;
+      display:flex;justify-content:space-between;align-items:center
+    }
+
+    .counter{font-family:monospace;background:#fff;border:2px solid #ddd;padding:6px 10px;display:inline-block}
+
+    @media(max-width:980px){
+      .page{width:92vw}
+      nav{width:180px}
+    }
+    @media(max-width:680px){
+      main{flex-direction:column}
+      nav{width:100%}
+    }
+  </style>
+</head>
+<body>
+  <div class="page" role="main">
+    <header>
+      <div class="logo">:C</div>
+      <div>
+        <h1>404</h1>
+        <div class="meta">This is what you definetly not searching for.</div>
+      </div>
+    </header>
+
+    <main>
+      <section class="content" aria-live="polite">
+        <p>You’ve accessed a part of the site that even the great Seadrive itself doesn’t recognize. Our files drift endlessly in digital waters, but this one must’ve slipped past the firewall and swam into oblivion.
+If you listen closely, you might still hear the faint echoes of dial-up tones calling it home…</p>
+      </section>
+    </main>
+
+    <footer>
+      <div>© Seadrive.online — 1999-2005 (well, almost)</div>
+    </footer>
+  </div>
+</body>
+</html>
