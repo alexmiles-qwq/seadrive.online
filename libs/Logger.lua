@@ -12,8 +12,6 @@ if not logfile then
     print('No log file found. New file will be created.')
 end
 
-
-
 function Logger:Log(message, rank)
     rank = rank or 1
     
