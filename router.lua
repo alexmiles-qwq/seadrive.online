@@ -228,8 +228,10 @@ local RateLimitTimer = 10 * 60
 local requests = {}
 local rateLimitedIps = {} 
 
+local rateLimitEnabled = true
+
 local function IsRateLimited(ip)
-    local now = os.clock()
+    local now = os.time()
     for i = #rateLimitedIps, 1, -1 do
         local entry = rateLimitedIps[i]
         if entry.ip == ip   then
@@ -248,7 +250,7 @@ local function IsRateLimited(ip)
 end
 
 local function clearRequests()
-    local now = os.clock()
+    local now = os.time()
     for i = #requests, 1, -1 do
         if now - requests[i].timestamp >= 1 then
             table.remove(requests, i)
@@ -257,7 +259,7 @@ local function clearRequests()
 end
 
 local function RateLimit(ip)
-    local now = os.clock()
+    local now = os.time()
     local limitUntil = now + RateLimitTimer
     
     local tbl = { ip = ip, limitUntil = now + RateLimitTimer }
@@ -283,7 +285,7 @@ local function onReq(req, ip)
     local reqData = {
         ip = ip,
         url = req.url,
-        timestamp = os.clock()
+        timestamp = os.time()
     }
 
     table.insert(requests, reqData)
