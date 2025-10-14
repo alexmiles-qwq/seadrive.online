@@ -222,7 +222,7 @@ local POST_Routes = {
 
 }
 
-local MaxReqPerSec = 5
+local MaxReqPerSec = 8
 local RateLimitTimer = 10 * 60
 
 local requests = {}
@@ -231,11 +231,15 @@ local rateLimitedIps = {}
 local function IsRateLimited(ip)
     local now = os.clock()
     for i = #rateLimitedIps, 1, -1 do
-        local v = rateLimitedIps[i]
-        if v.ip == ip then
-            if v.limitUntil > now then
+        local entry = rateLimitedIps[i]
+        if entry.ip == ip then
+            if entry.limitUntil > now then
                 return true
             else
+                table.remove(rateLimitedIps, i)
+            end
+        else
+            if entry.limitUntil <= now then
                 table.remove(rateLimitedIps, i)
             end
         end
@@ -256,51 +260,43 @@ local function RateLimit(ip)
     local now = os.clock()
     local limitUntil = now + RateLimitTimer
     
-    local tbl = {}
-    tbl.ip = ip
-    tbl.limitUntil = limitUntil
-
+    local tbl = { ip = ip, limitUntil = now + RateLimitTimer }
     table.insert(rateLimitedIps, tbl)
 end
 
 local function countReqs()
-    local tbl = {}
-
-    for i, v in pairs(requests) do
-        if not tbl[v.ip] then
-            tbl[v.ip] = 0
-        end
-        if IsRateLimited(ip) then
+    local counts = {}
+    for _, v in ipairs(requests) do
+        if IsRateLimited(v.ip) then
             goto continue
         end
-        tbl[v.ip] = tbl[v.ip] + 1
 
+        counts[v.ip] = (counts[v.ip] or 0) + 1
         ::continue::
     end
-
-    return tbl
+    return counts
 end
 
 local function onReq(req, ip)
-    
-    local reqData = {}
-    reqData.ip = ip
-    reqData.url = req.url
-    reqData.timestamp = os.clock()
+
+    local reqData = {
+        ip = ip,
+        url = req.url,
+        timestamp = os.clock()
+    }
 
     table.insert(requests, reqData)
     clearRequests()
 
     local counts = countReqs()
-
-    for ip, count in pairs(counts) do
+    for ipAddr, count in pairs(counts) do
         if count > MaxReqPerSec then
-            RateLimit(ip)
+            RateLimit(ipAddr)
         end
     end
 end
 
-local function datastoreVisitLog(req, ip)
+local function datastoreVisitLog(req, ip)   -- ips are saving for debugging stuff.
     local datastore = _G.VisitsDataStore
     local data = datastore:GetValue(tostring(ip)) or {}
 
