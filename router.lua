@@ -232,7 +232,7 @@ local function IsRateLimited(ip)
     local now = os.clock()
     for i = #rateLimitedIps, 1, -1 do
         local entry = rateLimitedIps[i]
-        if entry.ip == ip then
+        if entry.ip == ip   then
             if entry.limitUntil > now then
                 return true
             else
@@ -272,6 +272,7 @@ local function countReqs()
         end
 
         counts[v.ip] = (counts[v.ip] or 0) + 1
+        print(v.ip..': '..counts[v.ip])
         ::continue::
     end
     return counts
