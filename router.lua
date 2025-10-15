@@ -162,7 +162,7 @@ local GET_Routes = {
 
     ['favicon.ico'] = function(req, res)
         print('favicon :p')
-        serve_file(res, '/assets/general/favicon.ico')
+        serve_file(res, './assets/general/favicon.ico')
         
     end,
     ['ip'] = function(req, res, arg, ip)
