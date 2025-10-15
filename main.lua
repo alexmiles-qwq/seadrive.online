@@ -6,7 +6,7 @@ _G.Logger = require('./libs/Logger')
 Logger.minimalranktoprint = 2
 local __VERSION = '0.1.1'
 
-local http = require('https')
+local https = require('https')
 local timer = require('timer')
 
 local router = require('./router')
@@ -28,7 +28,7 @@ local options = {
 }
 
 
-local HttpServer = http.createServer(options, function(req, res)
+local HttpsServer = https.createServer(options, function(req, res)
 
     local sockaddr = req.socket:address()
     local ip = sockaddr and sockaddr.ip or "unknown"
@@ -50,7 +50,7 @@ local HttpServer = http.createServer(options, function(req, res)
 
 end)
 
-HttpServer:listen(80)
+HttpsServer:listen(443)
 Logger:Log('Session Started at ' .. os.date('%x') .. '.\n Version: '..__VERSION..'.\n Made by AlexMiles.', 99)
 
 timer.setInterval(30 * 1000, function()
