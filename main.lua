@@ -1,21 +1,34 @@
 
 print('Server is starting..\n')
 
+local fs = require('fs')
 _G.Logger = require('./libs/Logger')
 Logger.minimalranktoprint = 2
 local __VERSION = '0.1.1'
 
-local http = require('http')
+local http = require('https')
 local timer = require('timer')
 
 local router = require('./router')
 _G.mime  = require('.mime')
-_G.DataStore = require('./datastore')
+-- _G.DataStore = require('./datastore')
+
+_G.server = require('./server')
+_G.DataStore = server:GetService('DataStoreService')
 
 _G.AttachmentsDataStore = DataStore:GetDatastore('Attachments')
 _G.VisitsDataStore = DataStore:GetDatastore('VisitsDataStore')
 
-local HttpServer = http.createServer(function(req, res)
+local options = {
+  key = fs.readFileSync(os.getenv("SSL_KEY_PATH")),
+  cert = fs.readFileSync(os.getenv("SSL_CERT_PATH"))
+  -- ca = fs.readFileSync('path/to/ca_bundle.pem'),
+  -- requestCert = true,
+  -- rejectUnauthorized = true
+}
+
+
+local HttpServer = http.createServer(options, function(req, res)
 
     local sockaddr = req.socket:address()
     local ip = sockaddr and sockaddr.ip or "unknown"
@@ -31,6 +44,8 @@ local HttpServer = http.createServer(function(req, res)
 
     if not success then
         Logger:Log('ROUTER: '..err, 2)
+        res.statusCode = 500
+        res:finish('Interal error')
     end
 
 end)

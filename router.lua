@@ -308,7 +308,7 @@ local function datastoreVisitLog(req, ip)   -- ips are saving for debugging stuf
     local request = {}
     request.url = req.url
     request.method = req.method
-    req.timestamp = os.time()
+    request.timestamp = os.time()
 
     table.insert(requests, request)
 
