@@ -4,7 +4,7 @@ print('Server is starting..\n')
 local fs = require('fs')
 _G.Logger = require('./libs/Logger')
 Logger.minimalranktoprint = 2
-local __VERSION = '0.1.1'
+local __VERSION = '0.1.5'
 
 local https = require('https')
 local http = require('http')
@@ -20,15 +20,27 @@ _G.DataStore = server:GetService('DataStoreService')
 _G.AttachmentsDataStore = DataStore:GetDatastore('Attachments')
 _G.VisitsDataStore = DataStore:GetDatastore('VisitsDataStore')
 
+local function readFile(filepath)
+    return fs.readFileSync(filepath)
+end
+
+local key, cert = readFile('./privkey.pem'), readFile('./fullchain.pem')
+
 local options = {
-  -- key = fs.readFileSync(os.getenv("SSL_KEY_PATH")),
-  -- cert = fs.readFileSync(os.getenv("SSL_CERT_PATH"))
+  key = key,
+  cert = cert
   -- ca = fs.readFileSync('path/to/ca_bundle.pem'),
   -- requestCert = true,
   -- rejectUnauthorized = true
 }
 
-local useHttps = true
+local useHttps = false
+
+if not cert or not key then
+    useHttps = false
+    Logger:Log('Certificate files are missing or corrupted. Using http mode.', 99)
+end
+
 if not useHttps then
     _G.server.InsecureMode = true
 end
