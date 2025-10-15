@@ -1,40 +1,45 @@
 
 print('Server is starting..\n')
 
+-- modules
 local fs = require('fs')
-_G.Logger = require('./libs/Logger')
-Logger.minimalranktoprint = 2
-local __VERSION = '0.1.5'
-
 local https = require('https')
 local http = require('http')
 local timer = require('timer')
-
 local router = require('./router')
+
+_G.Logger = require('./libs/Logger')
 _G.mime  = require('.mime')
--- _G.DataStore = require('./datastore')
-
 _G.server = require('./server')
-_G.DataStore = server:GetService('DataStoreService')
 
+-- Settings 
+Logger.minimalranktoprint = 2
+local __VERSION = '0.1.6'
+
+
+-- Globals
+_G.DataStore = server:GetService('DataStoreService')
 _G.AttachmentsDataStore = DataStore:GetDatastore('Attachments')
 _G.VisitsDataStore = DataStore:GetDatastore('VisitsDataStore')
 
+-- Functions
 local function readFile(filepath)
     return fs.readFileSync(filepath)
 end
 
+-- Sertificate Files
 local key, cert = readFile('./privkey.pem'), readFile('./fullchain.pem')
 
-local options = {
+local options = {   -- HttpsServer options
   key = key,
   cert = cert
-  -- ca = fs.readFileSync('path/to/ca_bundle.pem'),
+  -- ca = fs.readFileSync('path/to/ca_bundle.pem'), ??
   -- requestCert = true,
   -- rejectUnauthorized = true
 }
 
-local useHttps = false
+-- Disable only for LOCAL TESTS!!
+local useHttps = false  
 
 if not cert or not key then
     useHttps = false
@@ -59,6 +64,7 @@ local function OnReq(req, res)
         router:handler(req, res)
     end)
 
+    -- womp womp
     if not success then
         Logger:Log('ROUTER: '..err, 2)
         res.statusCode = 500
@@ -76,11 +82,11 @@ else
     HttpServer:listen(80)
 end
 
-
-
 Logger:Log('Session Started at ' .. os.date('%x') .. '.\n Version: '..__VERSION..'.\n Made by AlexMiles.', 99)
 
 timer.setInterval(30 * 1000, function()
+
+    -- TODO: Better datastore saving system. This sucks!!!!
     local success, err = pcall(function()
         AttachmentsDataStore:_save()
     end)
@@ -102,4 +108,3 @@ timer.setInterval(30 * 1000, function()
     end
 
 end)
--- print('Running on localhost')

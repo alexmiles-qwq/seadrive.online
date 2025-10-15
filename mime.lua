@@ -10,7 +10,7 @@ local mime = {
   gif  = "image/gif",
   svg  = "image/svg+xml",
   txt  = "text/plain; charset=utf-8",
-  map  = "application/json", -- sourcemaps
+  -- map  = "application/json", -- sourcemaps ??
   ico  = "image/x-icon",
   wasm = "application/wasm",
   pdf  = "application/pdf",

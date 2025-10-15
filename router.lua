@@ -1,9 +1,18 @@
+
 local fs = require('fs')
 local path = require('path')
 local router = {}
 
--- functions
+-- Ratelimit stuff
+local MaxReqPerSec = 8
+local RateLimitTimer = 10 * 60
 
+local requests = {}
+local rateLimitedIps = {} 
+
+local rateLimitEnabled = true
+
+-- Functions
 local function readFile(filepath)
     return fs.readFileSync(filepath)
 end
@@ -221,14 +230,6 @@ local POST_Routes = {
     end
 
 }
-
-local MaxReqPerSec = 8
-local RateLimitTimer = 10 * 60
-
-local requests = {}
-local rateLimitedIps = {} 
-
-local rateLimitEnabled = true
 
 local function IsRateLimited(ip)
     local now = os.time()
